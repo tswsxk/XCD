@@ -245,7 +245,6 @@ class IRT(DL.CliServiceModule):
             eval_data=eval_data,
             ctx=ctx,
             toolbox=toolbox,
-            prefix=mod.prefix,
             save_epoch=cfg.save_epoch,
         )
 
