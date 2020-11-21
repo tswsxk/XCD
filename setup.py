@@ -17,7 +17,7 @@ setup(
         "EduData>=0.0.9",
         "pandas",
         "mxnet",
-        "longling==1.3.16"
+        "longling[ml]==1.3.16"
     ],  # And any other dependencies foo needs
     entry_points={
     },
