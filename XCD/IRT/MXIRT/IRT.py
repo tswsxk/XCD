@@ -197,13 +197,11 @@ class IRT(DL.CliServiceModule):
         mod = self.mod
         net = self.net
         cfg = mod.cfg if cfg is None else cfg
-        begin_epoch = cfg.begin_epoch
-
-        load_epoch = load_epoch if load_epoch is not None else begin_epoch
 
         model_file = kwargs.get(
-            "init_model_file", mod.epoch_params_filename(load_epoch)
+            "init_model_file", mod.epoch_params_filepath(load_epoch) if load_epoch is not None else None
         )
+
         mod.net_initialize(
             net,
             force_init=force_init, cfg=cfg,
@@ -344,7 +342,7 @@ class IRT(DL.CliServiceModule):
         self.train_net(train, valid)
 
     @classmethod
-    def train(cls, train_path, valid_path=None, cfg=None, **kwargs):
+    def train(cls, train_path, valid_path, cfg=None, **kwargs):
         model = cls(cfg=cfg, **kwargs)
         model.set_loss()
         cfg = model.cfg
