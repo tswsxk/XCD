@@ -87,7 +87,7 @@ class Module(module.Module):
         self.cfg.dump(filename, override=True)
         return filename
 
-    def epoch_params_filename(self, epoch):
+    def epoch_params_filepath(self, epoch):
         return self.prefix + "-%04d.parmas" % epoch
 
     # 部分定义训练相关的方法
@@ -235,7 +235,8 @@ class Module(module.Module):
                 ctx=ctx,
                 toolbox=toolbox,
             )
-            if hasattr(self.cfg, "lr_params") and self.cfg.lr_params and "update_params" in self.cfg.lr_params:
+            if hasattr(self.cfg, "lr_params") and self.cfg.lr_params \
+                    and "update_params" in self.cfg.lr_params and self.cfg.end_epoch - self.cfg.begin_epoch - 1 > 0:
                 self.cfg.logger.info("reset trainer")
                 lr_params = self.cfg.lr_params.pop("update_params")
                 lr_update_params = dict(
@@ -262,7 +263,6 @@ class Module(module.Module):
                 train_time = None
 
             if (epoch - 1) % eval_every_n_epoch == 0 or epoch == end_epoch - 1:
-                # # todo 定义每一轮结束后的模型评估方法
                 evaluation_result = self.eval(
                     net, test_data, ctx=ctx
                 )
