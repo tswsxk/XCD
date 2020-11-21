@@ -1,6 +1,7 @@
 # coding: utf-8
 # Copyright @tongshiwei
 import mxnet as mx
+import pandas as pd
 
 from longling.ML import DL
 
@@ -184,6 +185,9 @@ class IRT(DL.CliServiceModule):
         self.toolbox["timer"] = timer
         self.toolbox["formatter"]["evaluation"] = evaluation_formatter
 
+    def reload(self, load_epoch):
+        self.model_init(load_epoch, force_init=True, allow_reinit=True)
+
     def model_init(
             self,
             load_epoch=None, force_init=False, cfg=None,
@@ -275,7 +279,25 @@ class IRT(DL.CliServiceModule):
         )
 
     def __call__(self, *args, **kwargs):
-        raise NotImplementedError
+        cfg = self.cfg
+        net = self.net
+        user_id = list(range(cfg.hyper_params["user_num"]))
+        theta = net.get_theta(user_id)
+        user_df = pd.DataFrame({
+            "user_id": user_id,
+            "theta": theta.asnumpy().tolist()
+        })
+        item_id = list(range(cfg.hyper_params["item_num"]))
+        a = net.get_a(item_id)
+        b = net.get_b(item_id)
+        c = net.get_c(item_id)
+        item_df = pd.DataFrame({
+            "item_id": item_id,
+            "a": a.asnumpy().tolist(),
+            "b": b.asnumpy().tolist(),
+            "c": c.asnumpy().tolist(),
+        })
+        return user_df, item_df
 
     def call(self, x, ctx=None):
         # call forward for single data
@@ -323,15 +345,14 @@ class IRT(DL.CliServiceModule):
         self.train_net(train, valid)
 
     @classmethod
-    def train(cls, train_path, valid_path, cfg=None, **kwargs):
+    def train(cls, train_path, valid_path=None, cfg=None, **kwargs):
         model = cls(cfg=cfg, **kwargs)
         model.set_loss()
         cfg = model.cfg
-        # module.viz()
 
         model.toolbox_init()
         train_data, init_df = model.etl(train_path)
-        valid_data, _ = model.etl(valid_path)
+        valid_data, _ = model.etl(valid_path) if valid_path else (train_data, init_df)
         model.model_init(int_df=init_df, user_num=cfg.hyper_params["user_num"],
                          item_num=cfg.hyper_params["item_num"], **cfg.init_params)
 
