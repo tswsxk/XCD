@@ -13,6 +13,8 @@ setup(
         'test': test_deps,
     },
     install_requires=[
+        "numpy",
+        "EduData>=0.0.9"
     ],  # And any other dependencies foo needs
     entry_points={
     },
