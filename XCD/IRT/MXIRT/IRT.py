@@ -198,7 +198,6 @@ class IRT(DL.CliServiceModule):
 
         load_epoch = load_epoch if load_epoch is not None else begin_epoch
 
-        # 5 todo 初始化模型
         model_file = kwargs.get(
             "init_model_file", mod.epoch_params_filename(load_epoch)
         )
@@ -211,12 +210,6 @@ class IRT(DL.CliServiceModule):
         )
 
         self.initialized = True
-
-        # # optional
-        # # todo: whether to use static symbol to accelerate
-        # # note: do not invoke this method for dynamic structure like rnn
-        # # suggestion: annotate this until your process worked
-        # net.hybridize()
 
         self.trainer = mod.get_trainer(
             net, optimizer=cfg.optimizer,
@@ -238,7 +231,6 @@ class IRT(DL.CliServiceModule):
         end_epoch = mod.cfg.end_epoch
         ctx = mod.cfg.ctx
 
-        # 6 todo 训练
         trainer = self.trainer if trainer is None else trainer
         mod.logger.info("start training")
         mod.fit(
