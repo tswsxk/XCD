@@ -104,8 +104,7 @@ class IRT(DL.CliServiceModule):
 
         mod = module_cls(cfg)
         mod.logger.info(str(mod))
-        filename = mod.cfg.cfg_path
-        mod.logger.info("parameters saved to %s" % filename)
+        mod.logger.info("parameters will be saved to %s" % mod.cfg.model_dir)
         return mod
 
     def set_loss(self, loss_function=None):
