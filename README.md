@@ -1,5 +1,7 @@
 # XCD
-Mixture of Cognitive Diagnosis Models.
+Mixture of Cognitive Diagnosis Models, including:
+
+* Item Response Theory (IRT)
 
 ## Tutorials
 
