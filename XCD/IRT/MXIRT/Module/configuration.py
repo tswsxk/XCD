@@ -75,8 +75,6 @@ class Configuration(parser.Configuration):
     # 用户变量
     # 网络超参数
     hyper_params = dict(
-        user_num=4163,
-        item_num=17746,
         theta_range=[-4, 4],
         # a_range = [-3, 3]
         # a_range = [0, 100]
