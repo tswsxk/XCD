@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from .configuration import Configuration, ConfigurationParser
 from .etl import transform, etl
 from .module import Module
-from .sym import *
+from .sym import net_viz, get_loss, net_init, fit_f, get_net
 
 __all__ = [
     "Module",
